@@ -50,31 +50,6 @@ class SearchBar extends Component {
     });
   }
 
-  handleAddCategory(category) {
-    const { categories } = this.state;
-    categories[category] = true;
-
-    // update state
-    this.setState({
-      categories
-    });
-  }
-
-  handleRemoveCategory(category) {
-    const { categories } = this.state;
-    categories[category] = false;
-
-    // remove category from array
-    /*if (index > -1) {
-            categories.splice(index, 1);
-      }*/
-
-    // update state
-    this.setState({
-      categories
-    });
-  }
-
   changeRadius(event) {
     this.setState({
       radius: event.values
