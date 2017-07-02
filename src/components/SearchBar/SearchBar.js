@@ -21,8 +21,9 @@ class SearchBar extends Component {
     super(props);
     this.state = {
       searchTerm: '',
-      listedSince: [1],
+      listedSince: [0],
       sortBy: '',
+      location: {},
       radius: [1],
       searchInternational: '',
       categories: {
@@ -69,7 +70,19 @@ class SearchBar extends Component {
   }
 
   handleCategory(categoryName) {
-    const { categories } = this.state;
+    var { categories } = this.state;
+
+    // handle special cases for categories 'everything' and 'property'
+    categories = this.handleSingleCategoryToggle(
+      categories,
+      categoryName,
+      'everything'
+    );
+    categories = this.handleSingleCategoryToggle(
+      categories,
+      categoryName,
+      'property'
+    );
 
     // toggle category
     categories[categoryName] = !categories[categoryName];
@@ -80,14 +93,32 @@ class SearchBar extends Component {
     });
   }
 
+  /**
+   * Toggles all other categories except the selected one
+   * @param {*} categoryName 
+   * @param {*} singleCategoryName 
+   */
+  handleSingleCategoryToggle(categories, categoryName, singleCategoryName) {
+    if (categoryName === singleCategoryName) {
+      // remove all other categories if singleCategory is about to change to true
+      if (!categories[categoryName]) {
+        categories = {};
+      }
+    } else {
+      // set singleCategory to false in any other case
+      categories[singleCategoryName] = false;
+    }
+    return categories;
+  }
+
   render() {
     const { categories } = this.state;
     var filterOverlay = (
       <Panel>
         <div className="heading-left">FILTERS</div>
         <div className="categories-box">
-          <Row className="show-grid">
-            <Col xs={4}>
+          <Row>
+            <Col xs={12} sm={4}>
               <CategoryButton
                 categories={categories}
                 name="Everything"
@@ -102,8 +133,8 @@ class SearchBar extends Component {
               />
               <CategoryButton
                 categories={categories}
-                name="Fashion and Acessoiries"
-                value="fashion-and-acessoires"
+                name="Fashion and Accessories"
+                value="fashion-and-accessories"
                 onClick={this.handleCategory}
               />
               <CategoryButton
@@ -113,7 +144,7 @@ class SearchBar extends Component {
                 onClick={this.handleCategory}
               />
             </Col>
-            <Col xs={4}>
+            <Col xs={12} sm={4}>
               <CategoryButton
                 categories={categories}
                 name="Electronics"
@@ -139,7 +170,7 @@ class SearchBar extends Component {
                 onClick={this.handleCategory}
               />
             </Col>
-            <Col xs={4}>
+            <Col xs={12} sm={4}>
               <CategoryButton
                 categories={categories}
                 name="Cars and Motors"
@@ -169,7 +200,7 @@ class SearchBar extends Component {
         </div>
         <div className="sliders">
           <Row className="show-grid">
-            <Col xs={6}>
+            <Col xs={12} sm={6}>
               <SliderBox
                 header="Radius"
                 unit="km"
@@ -191,14 +222,14 @@ class SearchBar extends Component {
                 maxValue={1000}
               />
             </Col>
-            <Col xs={6}>
+            <Col xs={12} sm={6}>
               <SliderBox
                 header="Set your price range"
                 unit="€"
                 multipleValues={true}
                 value={this.state.priceRange}
                 onChangeValue={this.changePriceRange}
-                leftSymbol="money"
+                leftSymbol="euro"
                 rightSymbol="money"
                 minValue={1}
                 maxValue={1000}

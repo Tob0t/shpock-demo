@@ -68,7 +68,7 @@ class SliderBox extends Component {
           <Row className="show-grid">
             <div className="slider-description">
               <b>
-                {this.state.currentValues[0]}
+                {this.state.currentValues[0] || 0}
                 {this.state.currentValues.length > 1 &&
                   ' - ' + this.state.currentValues[1]}
                 {' ' + this.props.unit}
