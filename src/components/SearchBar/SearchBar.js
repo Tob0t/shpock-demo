@@ -14,6 +14,7 @@ import {
 } from 'react-bootstrap';
 import CategoryButton from '../../components/Button/CategoryButton.js';
 import SliderBox from '../../components/SliderBox/SliderBox.js';
+import MapContainer from '../../components/GoogleMaps/MapContainer.js';
 import { pick } from 'lodash';
 
 class SearchBar extends Component {
@@ -33,9 +34,8 @@ class SearchBar extends Component {
     };
 
     this.handleChange = this.handleChange.bind(this);
-    this.handleAddCategory = this.handleAddCategory.bind(this);
-    this.handleRemoveCategory = this.handleRemoveCategory.bind(this);
     this.changeRadius = this.changeRadius.bind(this);
+    this.changeLocation = this.changeLocation.bind(this);
     this.changeListedSince = this.changeListedSince.bind(this);
     this.changePriceRange = this.changePriceRange.bind(this);
     this.handleCategory = this.handleCategory.bind(this);
@@ -54,6 +54,12 @@ class SearchBar extends Component {
   changeRadius(event) {
     this.setState({
       radius: event.values
+    });
+  }
+
+  changeLocation(location) {
+    this.setState({
+      location
     });
   }
 
@@ -237,6 +243,21 @@ class SearchBar extends Component {
             </Col>
           </Row>
         </div>
+        <div className="gmaps">
+          <Row className="show-grid">
+            <Col xs={12} sm={6}>
+              <div className="heading-left">Location</div>
+              <MapContainer
+                center={{
+                  lat: 48.2089381,
+                  lng: 16.3615127
+                }}
+                onChangeLocation={this.changeLocation}
+              />
+            </Col>
+          </Row>
+        </div>
+
       </Panel>
     );
 
