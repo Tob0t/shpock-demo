@@ -38,6 +38,8 @@ class SliderBox extends Component {
     this.setState({
       currentValues: event.values
     });
+    // For live update (f.e radius)
+    //this.props.onChangeValue(event);
   }
 
   render() {
@@ -52,7 +54,7 @@ class SliderBox extends Component {
               <Rheostat
                 values={this.props.value}
                 onChange={this.handleChange}
-                scale="logarithmic"
+                algorithm={this.props.algorithm}
                 min={this.props.minValue}
                 max={this.props.maxValue}
                 onValuesUpdated={this.handleValuesUpdated}
@@ -68,12 +70,14 @@ class SliderBox extends Component {
           <Row className="show-grid">
             <div className="slider-description">
               <b>
+                {this.props.preSign}
                 {this.state.currentValues[0] || 0}
                 {this.state.currentValues.length > 1 &&
                   ' - ' + this.state.currentValues[1]}
                 {' ' + this.props.unit}
               </b>
             </div>
+            {this.props.extraLine}
           </Row>
         </Panel>
       </div>
