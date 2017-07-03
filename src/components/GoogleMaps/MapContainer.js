@@ -3,6 +3,7 @@ import { withGoogleMap, GoogleMap, Marker, Circle } from 'react-google-maps';
 import SearchBox from 'react-google-maps/lib/places/SearchBox';
 
 import styles from './MapContainer.css';
+import _ from 'lodash';
 
 const INPUT_STYLE = {
   boxSizing: `border-box`,
@@ -29,7 +30,7 @@ const INPUT_STYLE = {
 const GoogleMapsDefault = withGoogleMap(props =>
   <GoogleMap
     ref={props.onMapLoad}
-    defaultZoom={13}
+    zoom={props.zoom}
     center={props.center}
     onClick={props.onMapClick}
     onBoundsChanged={props.onBoundsChanged}
@@ -44,6 +45,17 @@ const GoogleMapsDefault = withGoogleMap(props =>
     />
 
     <Marker {...props.marker} />
+    <Circle
+      center={props.marker.position}
+      radius={props.radius * 1000}
+      options={{
+        fillColor: `green`,
+        fillOpacity: 0.3,
+        strokeColor: `green`,
+        strokeOpacity: 1,
+        strokeWeight: 0.2
+      }}
+    />
 
   </GoogleMap>
 );
@@ -53,6 +65,7 @@ class MapContainer extends Component {
     super(props);
     this.state = {
       bounds: null,
+      zoom: 13,
       center: props.center,
       marker: {
         position: {
@@ -62,17 +75,6 @@ class MapContainer extends Component {
         key: `Vienna`,
         defaultAnimation: 2,
         title: 'Location'
-      },
-      circle: {
-        lat: 48.2089381,
-        lng: 16.3615127,
-        strokeColor: '#FF0000',
-        strokeOpacity: 0.8,
-        strokeWeight: 2,
-        fillColor: '#FF0000',
-        fillOpacity: 0.35,
-        map: this._mapComponent,
-        radius: 500
       }
     };
 
@@ -89,26 +91,22 @@ class MapContainer extends Component {
 
   handleBoundsChanged() {
     this.setState({
-      bounds: this._mapComponent.getBounds()
-      // center: this._mapComponent.getCenter()
+      bounds: this._mapComponent.getBounds(),
+      center: this._mapComponent.getCenter()
     });
   }
 
   handleMapLoad(map) {
     this._mapComponent = map;
-    if (map) {
-      console.log(map.getZoom());
-    }
   }
 
   handlePlacesChanged() {
     const places = this._searchBox.getPlaces();
 
-    // Not needed
     // Add a marker for each place returned from search bar
-    /*const markers = places.map(place => ({
+    const markers = places.map(place => ({
       position: place.geometry.location
-    }));*/
+    }));
 
     // Set markers; set map center to first search result
     const mapCenter = markers.length > 0
@@ -153,9 +151,12 @@ class MapContainer extends Component {
             onSearchBoxMounted={this.handleSearchBoxMounted}
             onPlacesChanged={this.handlePlacesChanged}
             onBoundsChanged={this.handleBoundsChanged}
+            onRadiusChanged={this.handleRadiusChanged}
             marker={this.state.marker}
             circle={this.state.circle}
             center={this.state.center}
+            radius={this.props.radius}
+            zoom={this.state.zoom}
           />
         </div>
       </div>
