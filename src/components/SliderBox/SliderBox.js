@@ -1,19 +1,6 @@
 import React, { Component } from 'react';
 import styles from './SliderBox.css';
-import {
-  ControlLabel,
-  Col,
-  Button,
-  FormControl,
-  FormGroup,
-  HelpBlock,
-  Grid,
-  Panel,
-  Row,
-  Well
-} from 'react-bootstrap';
-import BootstrapSlider from 'bootstrap-slider/dist/css/bootstrap-slider.min.css';
-import ReactBootstrapSlider from 'react-bootstrap-slider';
+import { Col, Panel, Row } from 'react-bootstrap';
 import FontAwesome from 'react-fontawesome';
 import Rheostat from 'rheostat';
 import 'rheostat/css/slider.css';
@@ -39,7 +26,7 @@ class SliderBox extends Component {
       currentValues: event.values
     });
     // For live update (f.e radius)
-    //this.props.onChangeValue(event);
+    this.props.onChangeValue(event);
   }
 
   render() {
@@ -58,9 +45,6 @@ class SliderBox extends Component {
                 min={this.props.minValue}
                 max={this.props.maxValue}
                 onValuesUpdated={this.handleValuesUpdated}
-                //ticks = {[1, 2, 3, 4, 5, 6, 10, 15, 20, 30, 60, 100, 200, 300, 400, 500, 1000, 9999]}
-                //ticks_labels = {["1", "2", "3", "4", "5", "7", "10", "15", "20", "30", "60", "100", "200", "300", "400", "500", "1000", "everywhere"]}
-                //ticks_snap_bounds = { 30 }
               />
             </Col>
             <Col xs={2}>

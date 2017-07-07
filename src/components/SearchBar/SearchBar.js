@@ -30,23 +30,25 @@ class SearchBar extends Component {
     super(props);
     this.state = this.getinitialState();
 
-    this.handleChange = this.handleChange.bind(this);
-    this.changeRadius = this.changeRadius.bind(this);
-    this.changeLocation = this.changeLocation.bind(this);
-    this.changeListedSince = this.changeListedSince.bind(this);
-    this.changePriceRange = this.changePriceRange.bind(this);
-    this.handleCategory = this.handleCategory.bind(this);
-    this.handlePropertyCategory = this.handlePropertyCategory.bind(this);
-    this.changeRooms = this.changeRooms.bind(this);
-    this.changeArea = this.changeArea.bind(this);
-    this.clearFilters = this.clearFilters.bind(this);
-    this.handleSorting = this.handleSorting.bind(this);
-    this.toggleOnlyMyCountry = this.toggleOnlyMyCountry.bind(this);
-    this.sendSearch = this.sendSearch.bind(this);
+    this.handleChangeSearchTerm = this.handleChangeSearchTerm.bind(this);
+    this.handleChangeRadius = this.handleChangeRadius.bind(this);
+    this.handleChangeLocation = this.handleChangeLocation.bind(this);
+    this.handleChangeListedSince = this.handleChangeListedSince.bind(this);
+    this.handleChangePriceRange = this.handleChangePriceRange.bind(this);
+    this.handleToggleCategory = this.handleToggleCategory.bind(this);
+    this.handleTogglePropertyCategory = this.handleTogglePropertyCategory.bind(
+      this
+    );
+    this.handleChangeRooms = this.handleChangeRooms.bind(this);
+    this.handleChangeArea = this.handleChangeArea.bind(this);
+    this.handleClearFilters = this.handleClearFilters.bind(this);
+    this.handleChangeSorting = this.handleChangeSorting.bind(this);
+    this.hangleToggleOnlyMyCountry = this.hangleToggleOnlyMyCountry.bind(this);
+    this.handleSendSearch = this.handleSendSearch.bind(this);
   }
 
   getinitialState() {
-    const initialState = {
+    return {
       searchTerm: '',
       listedSince: [1],
       sortBy: 'distance',
@@ -65,77 +67,77 @@ class SearchBar extends Component {
       propertyRooms: [0],
       propertyArea: [0]
     };
-    return initialState;
   }
 
-  clearFilters() {
+  handleSendSearch() {
+    console.log(JSON.stringify(this.state));
+    this.setState(this.getinitialState());
+  }
+
+  handleClearFilters() {
     let searchTerm = this.state.searchTerm;
     this.setState(this.getinitialState());
     this.setState({ searchTerm });
   }
 
-  handleChange(event) {
+  handleChangeSearchTerm(event) {
     this.setState({
       searchTerm: event.target.value
-      /*output: {
-          ...this.state.output,
-          searchTerm: event.target.value
-      }*/
     });
   }
 
-  changeRadius(event) {
+  handleChangeRadius(event) {
     this.setState({
       radius: event.values
     });
   }
 
-  toggleOnlyMyCountry() {
+  hangleToggleOnlyMyCountry() {
     this.setState({
       onlyMyCountry: !this.state.onlyMyCountry
     });
   }
 
-  changeLocation(location) {
+  handleChangeLocation(location) {
     this.setState({
       location
     });
   }
 
-  changeListedSince(event) {
+  handleChangeListedSince(event) {
     this.setState({
       listedSince: event.values
     });
   }
 
-  changePriceRange(event) {
+  handleChangePriceRange(event) {
     this.setState({
       priceRange: event.values
     });
   }
 
-  changeRooms(event) {
+  handleChangeRooms(event) {
     this.setState({
       propertyRooms: event.values
     });
   }
 
-  changeArea(event) {
+  handleChangeArea(event) {
     this.setState({
       propertyArea: event.values
     });
   }
 
-  handleSorting(sortBy) {
+  handleChangeSorting(sortBy) {
     this.setState({
       sortBy
     });
   }
 
-  handlePropertyCategory(categoryName) {
+  handleTogglePropertyCategory(categoryName) {
     var { propertyCategories } = this.state;
 
-    // handle special cases for categories 'everything' and 'property' AND 'property-everything'
+    // handle special cases for categories 'property-everything'
     propertyCategories = this.handleSingleCategoryToggle(
       propertyCategories,
       categoryName,
@@ -151,7 +153,7 @@ class SearchBar extends Component {
     });
   }
 
-  handleCategory(categoryName) {
+  handleToggleCategory(categoryName) {
     var { categories } = this.state;
 
     // handle special cases for categories 'everything' and 'property' AND 'property-everything'
@@ -159,11 +161,6 @@ class SearchBar extends Component {
       categories,
       categoryName,
       'everything'
-    );
-    categories = this.handleSingleCategoryToggle(
-      categories,
-      categoryName,
-      'property-everything'
     );
     categories = this.handleSingleCategoryToggle(
       categories,
@@ -198,13 +195,6 @@ class SearchBar extends Component {
     return categories;
   }
 
-  /**
- *  experimental property initializer syntax (ES6)
- */
-  sendSearch() {
-    console.log(JSON.stringify(this.state));
-  }
-
   render() {
     const { categories } = this.state;
     const { propertyCategories } = this.state;
@@ -218,25 +208,25 @@ class SearchBar extends Component {
                 categories={categories}
                 name="Everything"
                 value="everything"
-                onClick={this.handleCategory}
+                onClick={this.handleToggleCategory}
               />
               <CategoryButton
                 categories={categories}
                 name="New in your area"
                 value="new-in-your-area"
-                onClick={this.handleCategory}
+                onClick={this.handleToggleCategory}
               />
               <CategoryButton
                 categories={categories}
                 name="Fashion and Accessories"
                 value="fashion-and-accessories"
-                onClick={this.handleCategory}
+                onClick={this.handleToggleCategory}
               />
               <CategoryButton
                 categories={categories}
                 name="Home and Garden"
                 value="home-and-garden"
-                onClick={this.handleCategory}
+                onClick={this.handleToggleCategory}
               />
             </Col>
             <Col xs={12} sm={4}>
@@ -244,25 +234,25 @@ class SearchBar extends Component {
                 categories={categories}
                 name="Electronics"
                 value="electronics"
-                onClick={this.handleCategory}
+                onClick={this.handleToggleCategory}
               />
               <CategoryButton
                 categories={categories}
                 name="Baby and Child"
                 value="baby-and-child"
-                onClick={this.handleCategory}
+                onClick={this.handleToggleCategory}
               />
               <CategoryButton
                 categories={categories}
                 name="Sport, Leisure and Games"
                 value="sport-leisure-and-games"
-                onClick={this.handleCategory}
+                onClick={this.handleToggleCategory}
               />
               <CategoryButton
                 categories={categories}
                 name="Movies, Books and Music"
                 value="movies-books-and-music"
-                onClick={this.handleCategory}
+                onClick={this.handleToggleCategory}
               />
             </Col>
             <Col xs={12} sm={4}>
@@ -270,25 +260,25 @@ class SearchBar extends Component {
                 categories={categories}
                 name="Cars and Motors"
                 value="cars-and-motors"
-                onClick={this.handleCategory}
+                onClick={this.handleToggleCategory}
               />
               <CategoryButton
                 categories={categories}
                 name="Property"
                 value="property"
-                onClick={this.handleCategory}
+                onClick={this.handleToggleCategory}
               />
               <CategoryButton
                 categories={categories}
                 name="Services"
                 value="services"
-                onClick={this.handleCategory}
+                onClick={this.handleToggleCategory}
               />
               <CategoryButton
                 categories={categories}
                 name="Other"
                 value="other"
-                onClick={this.handleCategory}
+                onClick={this.handleToggleCategory}
               />
             </Col>
           </Row>
@@ -302,13 +292,13 @@ class SearchBar extends Component {
                   categories={propertyCategories}
                   name="Everything"
                   value="property-everything"
-                  onClick={this.handlePropertyCategory}
+                  onClick={this.handleTogglePropertyCategory}
                 />
                 <CategoryButton
                   categories={propertyCategories}
                   name="For Sale"
                   value="property-for-sale"
-                  onClick={this.handlePropertyCategory}
+                  onClick={this.handleTogglePropertyCategory}
                 />
               </Col>
               <Col xs={12} sm={6}>
@@ -316,13 +306,13 @@ class SearchBar extends Component {
                   categories={propertyCategories}
                   name="For Rent"
                   value="property-for-rent"
-                  onClick={this.handlePropertyCategory}
+                  onClick={this.handleTogglePropertyCategory}
                 />
                 <CategoryButton
                   categories={propertyCategories}
                   name="Shared"
                   value="property-shared"
-                  onClick={this.handlePropertyCategory}
+                  onClick={this.handleTogglePropertyCategory}
                 />
               </Col>
             </Row>
@@ -334,7 +324,7 @@ class SearchBar extends Component {
                   unit=""
                   algorithm={linear}
                   value={this.state.propertyRooms}
-                  onChangeValue={this.changeRooms}
+                  onChangeValue={this.handleChangeRooms}
                   leftSymbol="square-o"
                   rightSymbol="plus-square-o"
                   minValue={0}
@@ -348,7 +338,7 @@ class SearchBar extends Component {
                   unit="m²"
                   algorithm={linear}
                   value={this.state.propertyArea}
-                  onChangeValue={this.changeArea}
+                  onChangeValue={this.handleChangeArea}
                   leftSymbol="home"
                   rightSymbol="bank"
                   minValue={1}
@@ -365,7 +355,7 @@ class SearchBar extends Component {
                 unit="days"
                 algorithm={log10}
                 value={this.state.listedSince}
-                onChangeValue={this.changeListedSince}
+                onChangeValue={this.handleChangeListedSince}
                 leftSymbol="clock-o"
                 rightSymbol="snowflake-o"
                 minValue={1}
@@ -379,7 +369,7 @@ class SearchBar extends Component {
                 algorithm={linear}
                 multipleValues={true}
                 value={this.state.priceRange}
-                onChangeValue={this.changePriceRange}
+                onChangeValue={this.handleChangePriceRange}
                 leftSymbol="euro"
                 rightSymbol="money"
                 minValue={1}
@@ -394,7 +384,7 @@ class SearchBar extends Component {
                 unit="km"
                 algorithm={log10}
                 value={this.state.radius}
-                onChangeValue={this.changeRadius}
+                onChangeValue={this.handleChangeRadius}
                 leftSymbol="home"
                 rightSymbol="globe"
                 minValue={1}
@@ -403,7 +393,7 @@ class SearchBar extends Component {
                   <div>
                     <Checkbox
                       checked={this.state.onlyMyCountry}
-                      onClick={this.toggleOnlyMyCountry}
+                      onClick={this.hangleToggleOnlyMyCountry}
                     >
                       <b>Search only in my country</b>
                     </Checkbox>
@@ -421,7 +411,7 @@ class SearchBar extends Component {
               <MapContainer
                 center={this.state.location}
                 radius={this.state.radius}
-                onChangeLocation={this.changeLocation}
+                onChangeLocation={this.handleChangeLocation}
               />
             </Col>
           </Row>
@@ -434,13 +424,13 @@ class SearchBar extends Component {
                 name="Distance"
                 value="distance"
                 sortBy={this.state.sortBy}
-                onClick={this.handleSorting}
+                onClick={this.handleChangeSorting}
               />
               <RadioButton
                 name="Price ▲"
                 value="priceAsc"
                 sortBy={this.state.sortBy}
-                onClick={this.handleSorting}
+                onClick={this.handleChangeSorting}
               />
             </Col>
             <Col xs={12} sm={6}>
@@ -448,13 +438,13 @@ class SearchBar extends Component {
                 name="Date"
                 value="date"
                 sortBy={this.state.sortBy}
-                onClick={this.handleSorting}
+                onClick={this.handleChangeSorting}
               />
               <RadioButton
                 name="Price ▼"
                 value="priceDesc"
                 sortBy={this.state.sortBy}
-                onClick={this.handleSorting}
+                onClick={this.handleChangeSorting}
               />
             </Col>
           </Row>
@@ -463,14 +453,14 @@ class SearchBar extends Component {
           <Button
             bsStyle="warning"
             className="extra-space"
-            onClick={this.clearFilters}
+            onClick={this.handleClearFilters}
           >
             Clear Filters
           </Button>
           <Button
             bsStyle="success"
             className="extra-space"
-            onClick={this.sendSearch}
+            onClick={this.handleSendSearch}
           >
             Search
           </Button>
@@ -489,10 +479,10 @@ class SearchBar extends Component {
                     type="text"
                     value={this.state.searchTerm}
                     placeholder="Enter text"
-                    onChange={this.handleChange}
+                    onChange={this.handleChangeSearchTerm}
                   />
-                  <InputGroup.Button controlId="search">
-                    <Button bsStyle="success" onClick={this.sendSearch}>
+                  <InputGroup.Button>
+                    <Button bsStyle="success" onClick={this.handleSendSearch}>
                       Search
                     </Button>
                   </InputGroup.Button>
@@ -506,7 +496,6 @@ class SearchBar extends Component {
           <Row className="show-grid">
             <Col xs={12} mdOffset={2} md={8} lgOffset={1} lg={10}>
               <Well>
-                {/*<b>Output:</b> {JSON.stringify(pick(this.state, ['categories']))}*/}
                 <b>Output:</b>{' '}
                 <pre>
                   {/*JSON.stringify({
