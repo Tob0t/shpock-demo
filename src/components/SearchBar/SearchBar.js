@@ -5,10 +5,13 @@ import {
   ControlLabel,
   Col,
   Button,
+  ButtonToolbar,
+  Form,
   FormControl,
   FormGroup,
-  HelpBlock,
   Grid,
+  HelpBlock,
+  InputGroup,
   Panel,
   Row,
   Well
@@ -39,6 +42,7 @@ class SearchBar extends Component {
     this.clearFilters = this.clearFilters.bind(this);
     this.handleSorting = this.handleSorting.bind(this);
     this.toggleOnlyMyCountry = this.toggleOnlyMyCountry.bind(this);
+    this.sendSearch = this.sendSearch.bind(this);
   }
 
   getinitialState() {
@@ -194,6 +198,13 @@ class SearchBar extends Component {
     return categories;
   }
 
+  /**
+ *  experimental property initializer syntax (ES6)
+ */
+  sendSearch() {
+    console.log(JSON.stringify(this.state));
+  }
+
   render() {
     const { categories } = this.state;
     const { propertyCategories } = this.state;
@@ -345,32 +356,10 @@ class SearchBar extends Component {
                 />
               </Col>
             </Row>
-
           </div>}
         <div className="sliders">
           <Row className="show-grid">
             <Col xs={12} sm={6}>
-              <SliderBox
-                header="Radius"
-                unit="km"
-                algorithm={log10}
-                value={this.state.radius}
-                onChangeValue={this.changeRadius}
-                leftSymbol="home"
-                rightSymbol="globe"
-                minValue={1}
-                maxValue={1000}
-                extraLine={
-                  <div>
-                    <Checkbox
-                      checked={this.state.onlyMyCountry}
-                      onClick={this.toggleOnlyMyCountry}
-                    >
-                      <b>Search only in my country</b>
-                    </Checkbox>
-                  </div>
-                }
-              />
               <SliderBox
                 header="Listed in the last"
                 unit="days"
@@ -398,10 +387,36 @@ class SearchBar extends Component {
               />
             </Col>
           </Row>
+          <Row className="show-grid">
+            <Col xs={12} smOffset={3} sm={6}>
+              <SliderBox
+                header="Radius"
+                unit="km"
+                algorithm={log10}
+                value={this.state.radius}
+                onChangeValue={this.changeRadius}
+                leftSymbol="home"
+                rightSymbol="globe"
+                minValue={1}
+                maxValue={1000}
+                extraLine={
+                  <div>
+                    <Checkbox
+                      checked={this.state.onlyMyCountry}
+                      onClick={this.toggleOnlyMyCountry}
+                    >
+                      <b>Search only in my country</b>
+                    </Checkbox>
+                  </div>
+                }
+              />
+            </Col>
+            <Col xs={12} sm={3} />
+          </Row>
         </div>
         <div className="gmaps">
           <Row className="show-grid">
-            <Col xs={12} sm={6}>
+            <Col xs={12} smOffset={3} sm={6}>
               <div className="heading-left">Location</div>
               <MapContainer
                 center={this.state.location}
@@ -444,33 +459,47 @@ class SearchBar extends Component {
             </Col>
           </Row>
         </div>
-
+        <div className="filter">
+          <Button
+            bsStyle="warning"
+            className="extra-space"
+            onClick={this.clearFilters}
+          >
+            Clear Filters
+          </Button>
+          <Button
+            bsStyle="success"
+            className="extra-space"
+            onClick={this.sendSearch}
+          >
+            Search
+          </Button>
+        </div>
       </Panel>
     );
 
     return (
-      <div>
+      <div className="searchBar">
         <Row className="show-grid">
           <Col xs={12} mdOffset={2} md={8} lgOffset={1} lg={10}>
-            <form>
+            <Form>
               <FormGroup controlId="formSearchBar">
-                <ControlLabel>Search here</ControlLabel>
-                <FormControl
-                  type="text"
-                  value={this.state.searchTerm}
-                  placeholder="Enter text"
-                  onChange={this.handleChange}
-                />
-                {this.state.searchTerm.length > 0 && filterOverlay}
-                <FormControl.Feedback />
+                <InputGroup>
+                  <FormControl
+                    type="text"
+                    value={this.state.searchTerm}
+                    placeholder="Enter text"
+                    onChange={this.handleChange}
+                  />
+                  <InputGroup.Button controlId="search">
+                    <Button bsStyle="success" onClick={this.sendSearch}>
+                      Search
+                    </Button>
+                  </InputGroup.Button>
+                </InputGroup>
               </FormGroup>
-              <FormGroup controlId="buttons">
-                <Button bsStyle="warning" onClick={this.clearFilters}>
-                  Clear Filters
-                </Button>
-                <Button bsStyle="success">Search</Button>
-              </FormGroup>
-            </form>
+            </Form>
+            {this.state.searchTerm.length > 0 && filterOverlay}
           </Col>
         </Row>
         {this.state.searchTerm.length > 0 &&
