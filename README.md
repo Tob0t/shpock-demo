@@ -15,4 +15,4 @@ Then open [http://localhost:3000/](http://localhost:3000/) to see your app.<br>
 ## Info
 This program is just an example implementation of the new search page and is not used in the live version!
 
-For more information visit [React] (https://github.com/facebook/react) or [Create React App](https://github.com/facebookincubator/create-react-app).
+For more information visit [React](https://github.com/facebook/react) or [Create React App](https://github.com/facebookincubator/create-react-app).
